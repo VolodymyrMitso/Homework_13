@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sh"
+    android:layout_marginBottom="@dimen/d_size_10dp">
+
+    <TextView
+        android:id="@+id/tv_Song_TC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/s_song"
+        android:textSize="@dimen/d_text_23sp"
+        android:layout_marginLeft="@dimen/d_size_10dp"
+        android:textColor="@color/c_text"
+        android:layout_marginTop="@dimen/d_size_5dp"/>
+
+    <TextView
+        android:layout_below="@id/tv_Song_TC"
+        android:id="@+id/tv_Artist_TC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/s_artist"
+        android:textSize="@dimen/d_text_20sp"
+        android:layout_marginLeft="@dimen/d_size_10dp"
+        android:textColor="@color/c_text"
+        android:layout_marginBottom="@dimen/d_size_5dp"/>
+
+    <TextView
+        android:id="@+id/tv_Duration_TC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/d_text_20sp"
+        android:text="@string/s_zero"
+        android:textColor="@color/c_text"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/d_size_10dp"/>
+
+
+
+</RelativeLayout>

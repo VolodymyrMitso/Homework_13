@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Homework_13</string>
+    
+    <string name="s_artist">Artist</string>
+    <string name="s_song">Song</string>
+    <string name="s_zero">00:00</string>
+</resources>
