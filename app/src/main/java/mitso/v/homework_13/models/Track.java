@@ -1,38 +1,65 @@
 package mitso.v.homework_13.models;
 
-public class Track {
+public class Track implements Comparable<Track> {
 
-    String Artist;
-    String Song;
-    String Duration;
+    private long id;
+    private String artist;
+    private String song;
+    private int duration;
 
-    public Track(String artist, String song, String duration) {
-        Artist = artist;
-        Song = song;
-        Duration = duration;
+    public Track(long id, String artist, String song, int duration) {
+        this.id = id;
+        this.artist = artist;
+        this.song = song;
+        this.duration = duration;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getArtist() {
-        return Artist;
+        return artist;
     }
 
     public void setArtist(String artist) {
-        Artist = artist;
+        this.artist = artist;
     }
 
     public String getSong() {
-        return Song;
+        return song;
     }
 
     public void setSong(String song) {
-        Song = song;
+        this.song = song;
     }
 
-    public String getDuration() {
-        return Duration;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setDuration(String duration) {
-        Duration = duration;
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public int compareTo(Track another) {
+
+        if (this.getArtist().compareTo(another.getArtist()) > 1)
+            return 1;
+        else if (this.getArtist().compareTo(another.getArtist()) < -1)
+            return -1;
+        else {
+            if (this.getSong().compareTo(another.getSong()) > 1)
+                return 1;
+            else if (this.getSong().compareTo(another.getSong()) < -1)
+                return -1;
+            else
+                return 0;
+        }
     }
 }

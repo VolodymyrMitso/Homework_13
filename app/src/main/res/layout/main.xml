@@ -11,10 +11,7 @@
         android:id="@+id/rv_TrackList_AM"
         android:layout_above="@+id/linearLayout"
         android:layout_alignParentTop="true"
-        android:background="@drawable/sh"
-        android:paddingLeft="@dimen/d_size_10dp"
-        android:paddingRight="@dimen/d_size_10dp"
-        android:paddingTop="@dimen/d_size_10dp"/>
+        android:background="@drawable/sh"/>
 
     <LinearLayout
         android:layout_marginTop="@dimen/d_size_10dp"
@@ -33,7 +30,7 @@
             android:textSize="@dimen/d_text_23sp"
             android:layout_marginLeft="@dimen/d_size_10dp"
             android:textColor="@color/c_text"
-            android:layout_marginTop="@dimen/d_size_10dp"/>
+            android:layout_marginTop="@dimen/d_size_5dp"/>
         <TextView
             android:id="@+id/tv_Artist_AM"
             android:layout_width="wrap_content"
@@ -42,12 +39,12 @@
             android:textSize="@dimen/d_text_20sp"
             android:layout_marginLeft="@dimen/d_size_10dp"
             android:textColor="@color/c_text"
-            android:layout_marginBottom="@dimen/d_size_10dp"/>
+            android:layout_marginBottom="@dimen/d_size_5dp"/>
 
-        <android.support.v7.widget.AppCompatSeekBar
-            android:id="@+id/sb_position_AM"
+        <SeekBar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:id="@+id/sb_Position_AM"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -55,7 +52,7 @@
             android:padding="@dimen/d_size_10dp">
 
             <TextView
-                android:id="@+id/tv_CurrentTime_AM"
+                android:id="@+id/tv_CurrentPosition_AM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/d_text_20sp"
@@ -66,7 +63,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:id="@+id/btn_Play_AM"
+                android:id="@+id/btn_PlayPause_AM"
                 android:layout_width="@dimen/d_size_50dp"
                 android:layout_height="@dimen/d_size_50dp"
                 android:background="@drawable/sh_btn_play"
@@ -75,20 +72,20 @@
                 android:layout_marginRight="@dimen/d_size_10dp"/>
 
             <Button
-                android:id="@+id/btn_Previous_AM"
+                android:id="@+id/btn_PreviousTrack_AM"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/sh_btn_previous"
-                android:layout_toLeftOf="@+id/btn_Play_AM"
-                android:layout_toStartOf="@+id/btn_Play_AM" />
+                android:layout_toLeftOf="@+id/btn_PlayPause_AM"
+                android:layout_toStartOf="@+id/btn_PlayPause_AM" />
 
             <Button
-                android:id="@+id/tv_btn_Next_AM"
+                android:id="@+id/btn_NextTrack_AM"
                 android:layout_width="@dimen/d_size_50dp"
                 android:layout_height="@dimen/d_size_50dp"
                 android:background="@drawable/sh_btn_next"
-                android:layout_toRightOf="@id/btn_Play_AM"
-                android:layout_toEndOf="@id/btn_Play_AM" />
+                android:layout_toRightOf="@id/btn_PlayPause_AM"
+                android:layout_toEndOf="@id/btn_PlayPause_AM" />
 
             <TextView
                 android:id="@+id/tv_Duration_AM"
