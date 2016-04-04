@@ -14,12 +14,14 @@ import android.os.PowerManager;
 
 import java.util.ArrayList;
 
+import mitso.v.homework_13.Constants.Constants;
 import mitso.v.homework_13.MainActivity;
 import mitso.v.homework_13.R;
 import mitso.v.homework_13.models.Track;
 
 public class MusicService extends Service implements
-        MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener,
         MediaPlayer.OnErrorListener {
 
     private MediaPlayer mMediaPlayer;
@@ -27,7 +29,6 @@ public class MusicService extends Service implements
     private ArrayList<Track> mTrackList;
     private String mArtist;
     private String mSong;
-    private int mDuration;
     private int mTrackPosition;
 
     private IBinder mMusicBind = new MusicBinder();
@@ -87,7 +88,7 @@ public class MusicService extends Service implements
         long id = track.getId();
         mArtist = track.getArtist();
         mSong = track.getSong();
-//        mDuration = track.getDuration();
+
         Uri uri = ContentUris.withAppendedId(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
 
         try {
@@ -100,17 +101,16 @@ public class MusicService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-//        if(mMediaPlayer.getCurrentPosition() > 0) {
-//            mediaPlayer.reset();
+
             playNextTrack();
-//        }
+
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         mediaPlayer.start();
-        sendBroadcast(new Intent("xxx"));
-        startForeground(1, getNotification());
+        sendBroadcast(new Intent(Constants.BROADCAST_BUNDLE));
+        startForeground(789, getNotification());
     }
 
     private Notification getNotification() {

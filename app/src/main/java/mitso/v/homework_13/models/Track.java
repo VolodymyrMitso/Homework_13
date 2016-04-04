@@ -1,6 +1,6 @@
 package mitso.v.homework_13.models;
 
-public class Track implements Comparable<Track> {
+public final class Track implements Comparable<Track> {
 
     private long id;
     private String artist;
@@ -26,24 +26,12 @@ public class Track implements Comparable<Track> {
         return artist;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
     public String getSong() {
         return song;
     }
 
-    public void setSong(String song) {
-        this.song = song;
-    }
-
     public int getDuration() {
         return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     @Override

@@ -16,7 +16,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -25,6 +24,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import mitso.v.homework_13.Constants.Constants;
 import mitso.v.homework_13.interfaces.EventHandler;
 import mitso.v.homework_13.models.Track;
 import mitso.v.homework_13.recycler_view.SpacesItemDecoration;
@@ -58,57 +58,26 @@ public class MainActivity extends AppCompatActivity implements EventHandler,
         initRecyclerView();
         initViews();
         initBroadcastReceiver();
-
-        Log.e("RRR", "onCreate");
     }
-
-    private void initBroadcastReceiver() {
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateUI();
-            }
-        };
-    }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//
-//        Toast.makeText(MainActivity.this, "onStart", Toast.LENGTH_SHORT).show();
-//    }
-
-//    private boolean isRegistered = false;
 
     @Override
     protected void onResume() {
-
-        Log.e("TEST", "resume - start");
-
         try {
             if(mIntent == null) {
                 mIntent = new Intent(this, MusicService.class);
                 bindService(mIntent, serviceConnection, Context.BIND_AUTO_CREATE);
                 startService(mIntent);
             }
-            registerReceiver(mBroadcastReceiver, new IntentFilter("xxx"));
+            registerReceiver(mBroadcastReceiver, new IntentFilter(Constants.BROADCAST_BUNDLE));
+            mTrackAdapter.setEventHandler(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        mTrackAdapter.setEventHandler(this);
-
         super.onResume();
-
-        Log.e("TEST", "resume - finish");
-
     }
 
     @Override
     protected void onPause() {
-        Log.e("TEST", "pause - start");
-
         try {
             if (!mMusicService.isPlaying()) {
                 stopService(mIntent);
@@ -116,70 +85,12 @@ public class MainActivity extends AppCompatActivity implements EventHandler,
             }
             unbindService(serviceConnection);
             unregisterReceiver(mBroadcastReceiver);
+            mTrackAdapter.releaseEventHandler();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        mTrackAdapter.releaseEventHandler();
-
         super.onPause();
-        Log.e("TEST", "pause - finish");
-
     }
-
-    private void updateUI() {
-
-        int duration = mMusicService.getDuration();
-
-        mTextView_Artist.setText(mMusicService.getArtist());
-        mTextView_Song.setText(mMusicService.getSong());
-
-        mSeekBar_Position.setMax(duration);
-        mSeekBar_Position.setProgress(0);
-
-        mTextView_Duration.setText(getTimeString(duration));
-
-        final Handler handler = new Handler();
-        MainActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int currentPosition = mMusicService.getCurrentPosition();
-                    mSeekBar_Position.setProgress(currentPosition);
-
-                    mTextView_CurrentPosition.setText(getTimeString(currentPosition));
-
-                    handler.postDelayed(this, 1000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private String getTimeString(long millis) {
-        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
-        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
-        return String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
-    }
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
-            mMusicService = binder.getService();
-            mMusicService.setTrackList(mTrackList);
-
-            if (mMusicService.isPlaying()) {
-                mButton_PlayPause.setBackgroundResource(R.drawable.sh_btn_pause);
-                updateUI();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
 
     private void initRecyclerView() {
         mRecyclerView_TrackList = (RecyclerView) findViewById(R.id.rv_TrackList_AM);
@@ -211,6 +122,61 @@ public class MainActivity extends AppCompatActivity implements EventHandler,
         if (mSeekBar_Position != null)
             mSeekBar_Position.setOnSeekBarChangeListener(this);
     }
+
+    private void initBroadcastReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateUI();
+            }
+        };
+    }
+
+    private void updateUI() {
+        mTextView_Artist.setText(mMusicService.getArtist());
+        mTextView_Song.setText(mMusicService.getSong());
+        mSeekBar_Position.setMax(mMusicService.getDuration());
+        mSeekBar_Position.setProgress(0);
+        mTextView_Duration.setText(getTimeString(mMusicService.getDuration()));
+
+        final Handler handler = new Handler();
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int currentPosition = mMusicService.getCurrentPosition();
+                    mSeekBar_Position.setProgress(currentPosition);
+                    mTextView_CurrentPosition.setText(getTimeString(currentPosition));
+                    handler.postDelayed(this, 1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private String getTimeString(long millis) {
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+        return String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+            mMusicService = binder.getService();
+            mMusicService.setTrackList(mTrackList);
+
+            if (mMusicService.isPlaying()) {
+                mButton_PlayPause.setBackgroundResource(R.drawable.sh_btn_pause);
+                updateUI();
+            }
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
 
     private ArrayList<Track> getTrackList() {
         ArrayList<Track> trackList = new ArrayList<>();
@@ -272,17 +238,6 @@ public class MainActivity extends AppCompatActivity implements EventHandler,
                 break;
         }
     }
-
-//    @Override
-//    protected void onDestroy() {
-//
-//
-//
-//        Toast.makeText(MainActivity.this, "onDestroy", Toast.LENGTH_SHORT).show();
-//
-//
-//        super.onDestroy();
-//    }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
